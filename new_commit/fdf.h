@@ -6,16 +6,15 @@
 /*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 17:53:02 by dacastil          #+#    #+#             */
-/*   Updated: 2025/02/24 15:49:25 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/02/26 21:55:09 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
 # define FDF_H
 
-# define EJE_X 1000
-# define EJE_Y 1000
-# define EJE_Z
+# define EJE_X_W 1000
+# define EJE_Y_W 1000
 
 # include <math.h>
 # include <limits.h>
@@ -26,6 +25,14 @@
 # include "get_next_line_bonus.h"
 # include "./minilibx-linux/mlx.h"
 
+typedef struct s_bress
+{
+	int		dif_x;
+	int		dif_y;
+
+	int		m;
+}				t_bress;
+
 typedef struct s_ejes
 {
 	int		*len_x;
@@ -33,13 +40,14 @@ typedef struct s_ejes
 	int		**matx_z;
 	float	x1;
 	float	y1;
+	int		pos_x;
+	int		pos_y;
 }				t_ejes;
 
 typedef struct s_coord
 {
 	int	**x1;
 	int	**y1;
-
 }				t_coord;
 
 typedef struct s_vars
@@ -61,11 +69,16 @@ int		count_spaces(char *line);
 int		*rest_len(int *len, char **lines);
 int		ft_countsubstr(const char*s, char c);
 char	**ft_split(char const *s, char c);
-void	prints(int i, int *len);
+void	prints(int i, int *len, t_coord *coord);
 int		*ft_intchr(int *s, int c);
 t_ejes	*init_ejes(int fd, char **lines, char *argv);
 t_coord	*find_coord_iso(t_ejes *eje);
 t_coord	*init_coord(t_ejes *eje);
-void	alg_bressenham(t_ejes *eje);
+void	printlines(int x, int y, int x1, int y1);
+void	alg_bressenham(t_ejes *eje, int x1, int y1, t_vars	vars);
+t_bress	*init_bress(int x, int y, int x1, int y1);
+int		Vabs(int n);
+int		max(int difx, int dify);
+void	draw(t_ejes *eje);
 
 #endif

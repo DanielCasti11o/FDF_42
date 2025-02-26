@@ -6,7 +6,7 @@
 /*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 18:20:38 by dacastil          #+#    #+#             */
-/*   Updated: 2025/02/24 13:37:55 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/02/26 22:38:43 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,31 +18,140 @@
 // 	return (0);
 // }
 
-void	alg_bressenham(int x, int y, int x1, int y1, t_ejes *eje)
+int	max(int difx, int dify)
 {
-	int		dif_x;
-	int		dif_y;
-	char	flag;
-	int		m;
-
-	dif_x = (x - x1);
-	dif_y = (y - y1);
-	m = dif_y / dif_x;
-	if (m <= 1)
-		flag = 'x';
+	if (difx < dify)
+		return (dify);
 	else
-		flag = 'y';
-	// while (1)
-	// {
-	// 	eje->x1 = (eje->len_x[i] - eje_y) * cos(30);
-	// 	eje->y1 = (eje->len_x[i] + eje_y) * sin(30) - eje->matx_z[i][eje_y];
-	// 	while ()
-	// 	{
+		return (difx);
+}
 
-	// 	}
-	// 	i++;
-	// 	eje_y++;
-	// }
+int	Vabs(int n)
+{
+	if (n < 0)
+		return (-n);
+	else
+		return (n);
+}
+
+// void	printlines(int x, int y, int x1, int y1)
+// {
+// 	int		p;
+// 	t_vars	vars;
+
+// 	// x += 10;
+// 	// y += 10;
+// 	// x1 += 10;
+// 	// y1 += 10;
+// 	vars.mlx = mlx_init();
+// 	vars.win = mlx_new_window(vars.mlx, 2000, 1000, "Hello world!");
+// 	while(1)
+// 	{
+// 		if (x1 > y1)
+// 		{
+// 			mlx_pixel_put(vars.mlx, vars.win, x + 1, y, 0xFFFFFF);
+// 			x++;
+// 		}
+// 		else
+// 		{
+// 			mlx_pixel_put(vars.mlx, vars.win, x, y + 1, 0xFFFFFF);
+// 			y++;
+// 		}
+// 		if (x == x1 && y == y1)
+// 			break ;
+// 		mlx_pixel_put(vars.mlx, vars.win, x, y, 0xFFFFFF);
+// 		x++;
+// 		y++;
+// 	}
+// 	mlx_loop(vars.mlx);
+// }
+
+
+void	draw(t_ejes *eje)
+{
+	t_vars	vars;
+
+	vars.mlx = mlx_init();
+	vars.win = mlx_new_window(vars.mlx, EJE_X_W, EJE_X_W, "Hello world!");
+	alg_bressenham(eje, 800, 200, vars);
+	mlx_loop(vars.mlx);
+
+}
+
+void	slop_x(t_ejes *eje, int x1, int y1, t_vars	vars)
+{
+	int	error;
+
+	if (bress->dif_x >= bress->dif_y)
+		{
+			error = (bress->dif_y * 2) - bress->dif_x;
+			while (eje->pos_x != x1)
+			{
+				eje->pos_x++;
+				if (error > 0)
+				{
+					if (y1 > eje->pos_y)
+						eje->pos_y++;
+					else
+						eje->pos_y--;
+					error -= bress->dif_x * 2;
+				}
+				error += bress->dif_y * 2;
+				mlx_pixel_put(vars.mlx, vars.win, eje->pos_x, eje->pos_y, 0xFFFFFF);
+				}
+
+		}
+	}
+
+void	alg_bressenham(t_ejes *eje, int x1, int y1, t_vars	vars)
+{
+	t_bress	*bress;
+	int		error;
+
+	bress = init_bress(eje->pos_x, eje->pos_y, x1, y1);
+	while (1)
+	{
+		mlx_pixel_put(vars.mlx, vars.win, eje->pos_x, eje->pos_y, 0xFFFFFF);
+		if (bress->dif_x >= bress->dif_y)
+		{
+			error = (bress->dif_y * 2) - bress->dif_x;
+			while (eje->pos_x != x1)
+			{
+				eje->pos_x++;
+				if (error > 0)
+				{
+					if (y1 > eje->pos_y)
+						eje->pos_y++;
+					else
+						eje->pos_y--;
+					error -= bress->dif_x * 2;
+				}
+				error += bress->dif_y * 2;
+				mlx_pixel_put(vars.mlx, vars.win, eje->pos_x, eje->pos_y, 0xFFFFFF);
+			}
+		}
+		else
+		{
+			error = (bress->dif_x * 2) - bress->dif_y;
+			while (eje->pos_y != y1)
+			{
+				eje->pos_y++;
+				if (error >= 0)
+				{
+					if (x1 > eje->pos_x)
+						eje->pos_x++;
+					else
+						eje->pos_x--;
+					error -= bress->dif_y * 2;
+				}
+				error += bress->dif_x * 2;
+				mlx_pixel_put(vars.mlx, vars.win, eje->pos_x, eje->pos_y, 0xFFFFFF);
+			}
+		}
+		if (eje->pos_x == x1 || eje->pos_y == y1)
+			break ;
+	}
+	mlx_loop(vars.mlx);
 }
 
 // void	key_hook(int keycode, t_vars vars)
@@ -50,7 +159,7 @@ void	alg_bressenham(int x, int y, int x1, int y1, t_ejes *eje)
 
 // }
 
-// void	prints(int i, int *len)
+// void	prints(int i, int *len, t_coord *coord)
 // {
 // 	t_vars	vars;
 // 	t_ejes	eje;
@@ -58,6 +167,8 @@ void	alg_bressenham(int x, int y, int x1, int y1, t_ejes *eje)
 // 	int		x;
 // 	int		y;
 // 	int		aux;
+// 	int		pt = 0;
+// 	int		pt_peq = 0;
 // 	int		ref;
 
 // 	x = 100;
@@ -74,16 +185,21 @@ void	alg_bressenham(int x, int y, int x1, int y1, t_ejes *eje)
 // 	while (ref < len[aux])
 // 	{
 // 		mlx_pixel_put(vars.mlx, vars.win, x, y, 0xFFFFFF);
+// 		mlx_pixel_put(vars.mlx, vars.win, (coord->y1[pt][pt_peq] + x), (y), 0xFFFFFF);
 // 		x++;
 // 		while (pix != 15)
 // 		{
 // 			mlx_pixel_put(vars.mlx, vars.win, x, y, 0x000000);
+// 			mlx_pixel_put(vars.mlx, vars.win, x, (coord->y1[pt][pt_peq] + y), 0xFFFFFF);
 // 			y++;
 // 			pix++;
+// 			pt_peq++;
 // 		}
+// 		pt_peq = 0;
 // 		y -= 15;
 // 		pix = 0;
 // 		mlx_pixel_put(vars.mlx, vars.win, x, y, 0xFFFFFF);
+// 		mlx_pixel_put(vars.mlx, vars.win, (coord->y1[pt][pt_peq] + x), (y), 0xFFFFFF);
 // 		x++;
 // 		ref++;
 // 		while (pix != 15)
@@ -97,6 +213,7 @@ void	alg_bressenham(int x, int y, int x1, int y1, t_ejes *eje)
 // 		{
 // 			printf("aguacate\n");
 // 			y++;
+// 			pt++;
 // 			if (y == i)
 // 				break ;
 // 			ref = 0;

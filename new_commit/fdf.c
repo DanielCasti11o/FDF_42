@@ -6,7 +6,7 @@
 /*   By: dacastil <dacastil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 17:55:43 by dacastil          #+#    #+#             */
-/*   Updated: 2025/02/24 16:24:43 by dacastil         ###   ########.fr       */
+/*   Updated: 2025/02/26 21:51:07 by dacastil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,24 +81,6 @@ char	**init_map(int fd, int i, int *len, char *argv)
 	return (matx);
 }
 
-t_ejes	*init_ejes(int fd, char **lines, char *argv)
-{
-	t_ejes	*eje;
-
-	eje = malloc(sizeof(t_ejes));
-	if (!eje)
-		return (NULL);
-	eje->len_y = count_lines(fd, argv);
-	eje->len_x = lengs(eje->len_y, fd, argv);
-	lines = init_map(fd, eje->len_y, eje->len_x, argv);
-	if (!lines)
-		fr_words(lines);
-	eje->len_x = rest_len(eje->len_x, lines);
-	eje->matx_z = matx_to_arr(lines, eje->len_y, eje->len_x);
-	eje->x1 = 0;
-	eje->y1 = 0;
-	return (eje);
-}
 
 int	main(int argc, char **argv)
 {
@@ -109,22 +91,41 @@ int	main(int argc, char **argv)
 
 	eje = init_ejes(fd, lines, argv[1]);
 	printf("start\n");
-	// int	k = 0;
-	// int	p = 0;
-	// int	ñ;
-	// while (k < eje->len_y)
-	// {
-	// 	ñ = 0;
-	// 	while (ñ < eje->len_x[p])
-	// 	{
-	// 		printf("%3d", eje->matx_z[k][ñ]);
-	// 		ñ++;
-	// 	}
-	// 	printf("\n");
-	// 	p++;
-	// 	k++;
-	// }
+	int	k = 0;
+	int	p = 0;
+	int	ñ;
+	while (k < eje->len_y)
+	{
+		ñ = 0;
+		while (ñ < eje->len_x[p])
+		{
+			printf("%3d", eje->matx_z[k][ñ]);
+			ñ++;
+		}
+		printf("\n");
+		p++;
+		k++;
+	}
 	coord = find_coord_iso(eje);
-	// alg_bressenham();
-	// prints(eje->len_y, eje->len_x);
+	k = 0;
+	p = 0;
+	while (k < eje->len_y)
+	{
+		ñ = 0;
+		while (ñ < eje->len_x[p])
+		{
+			printf("(x1 %d) ", coord->x1[k][ñ]);
+			printf("(y1 %d) ", coord->y1[k][ñ]);
+			ñ++;
+		}
+		printf("\n");
+		p++;
+		k++;
+	}
+	int	i = 0;
+	int	len = eje->len_y;
+	draw(eje);
+	// alg_bressenham(100, 100, 1000, 300);
+	// printlines(10, 10, 1000, 500);
+	// prints(eje->len_y, eje->len_x, coord);
 }
